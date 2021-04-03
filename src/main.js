@@ -19,7 +19,7 @@ const GAME = {
   LOSE: 'lose'
 };
 
-(function makeImgSrcList(){
+(function makeImgSrcList() {
   for (let i = 0; i < imgs.length; i++) {
     const imgUrl = new Images(i + 1, imgs[i]);
     imgUrls.push(imgUrl);
@@ -32,7 +32,10 @@ let answerCount = 0;
 let timer = null;
 
 function updateAnswerCount(count) {
-  (count === QUESTION_COUNT) && finishGame(GAME.WIN);
+  if (count === QUESTION_COUNT) {
+    finishGame(GAME.WIN);
+  }
+
   $gameState.textContent = `${QUESTION_COUNT - count}명`;
 }
 
@@ -57,7 +60,7 @@ function handleCheckAnswer(ev) {
     setTimeout(() => {
       flipImg(firstImg);
       flipImg(secondImg);
-    }, 300)
+    }, 300);
   }
 
   flippedImgs.length = 0;
@@ -145,7 +148,7 @@ function removeSquares() {
 }
 
 function createSquares() {
-  for (let i =0; i < QUESTION_COUNT * 2; i++){
+  for (let i =0; i < QUESTION_COUNT * 2; i++) {
     const $square = document.createElement('div');
     const $frontSquare = document.createElement('div');
     const $backSquare = document.createElement('div');
@@ -188,7 +191,7 @@ function startTimer() {
     } else {
       updateGameTimer(--seconds);
     }
-  }, 1000)
+  }, 1000);
 }
 
 function finishGame(gameState) {
@@ -222,16 +225,11 @@ function startGame() {
   toggleGameInfoBar();
   updateAnswerCount(answerCount);
   sound.playBackground();
-
 }
 
-$squareContainer.addEventListener('click', (ev) => {
-  handleFlipSquare(ev);
-});
+$squareContainer.addEventListener('click', handleFlipSquare);
 
-$squareContainer.addEventListener('click', (ev) => {
-  handleCheckAnswer(ev);
-});
+$squareContainer.addEventListener('click', handleCheckAnswer);
 
 $startButton.addEventListener('click', () => {
   sound.playStart();
