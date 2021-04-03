@@ -11,7 +11,7 @@ const flippedImgs = [];
 const imgUrls = [];
 
 const QUESTION_COUNT = 8;
-const TIME_LIMIT = 30;
+const TIME_LIMIT = 25;
 const GAME = {
   START: '시작',
   RESTART: '재시작',
