@@ -1,4 +1,5 @@
-import {Images, imgs, winImgs, loseImgs, startImg} from '../src/imgs.js';
+import {Images, imgs, winImgs, loseImgs, startImg} from './imgs.js';
+import *as sound from './sound.js';
 
 const $squareContainer = document.querySelector('.square__container');
 const $startButton = document.querySelector('.start__button');
@@ -10,15 +11,7 @@ const flippedImgs = [];
 const imgUrls = [];
 
 const QUESTION_COUNT = 8;
-const TIME_LIMIT = 60;
-const CLASS_NAME = {
-  HIDE_GAME_INFO: 'hide-game__info',
-  START_IMG: 'start-img',
-  WIN_IMG: 'win-img',
-  LOSE_IMG: 'lose-img',
-  BG_IMG: 'bg-img'
-};
-
+const TIME_LIMIT = 30;
 const GAME = {
   START: '시작',
   RESTART: '재시작',
@@ -57,8 +50,10 @@ function handleCheckAnswer(ev) {
   const secondImgNumber = secondImg.dataset.number;
 
   if (firstImgNumber === secondImgNumber) {
+    sound.playCorrect();
     updateAnswerCount(++answerCount);
   } else {
+    sound.playError();
     setTimeout(() => {
       flipImg(firstImg);
       flipImg(secondImg);
@@ -70,9 +65,10 @@ function handleCheckAnswer(ev) {
 
 function handleFlipSquare(ev) {
   const nowImg = ev.target.parentNode;
-  const ifNotImg = ev.target === ev.currentTarget;
+  const flippedImg = nowImg.classList.contains('flip');
+  const squareImg = ev.target.classList.contains('square-img');
 
-  if (!isPlaying || ifNotImg) {
+  if (!squareImg || flippedImg) {
     return;
   }
 
@@ -81,7 +77,7 @@ function handleFlipSquare(ev) {
 }
 
 function toggleGameInfoBar() {
-  $gameInfoBar.classList.toggle(CLASS_NAME.HIDE_GAME_INFO);
+  $gameInfoBar.classList.toggle('hide-game__info');
 }
 
 function changeButtonText() {
@@ -95,9 +91,11 @@ function changeBackgroundImg(gameState) {
   switch(gameState) {
     case GAME.WIN:
       imgUrl = winImgs[0];
+      sound.playWin();
       break;
     case GAME.LOSE:
       imgUrl = loseImgs[0];
+      sound.playLose();
       break;
     case GAME.RESTART:
       imgUrl = startImg;
@@ -124,8 +122,10 @@ function paintSquaresByImg(urls) {
 
     $frontImg.src = '../bgs/square-bg.jpg'
     $backImg.src = urls[j].url;
-    $frontImg.setAttribute('class', 'square-img');
-    $backImg.setAttribute('class', 'square-img');
+    $frontImg.classList.add('square-img');
+    $backImg.classList.add('square-img');
+    $frontImg.setAttribute('draggable', false);
+    $backImg.setAttribute('draggable', false);
   }
 }
 
@@ -165,7 +165,8 @@ function removeBackground() {
 function createBackgroundImg() {
   const $backgroundImg = document.createElement('img');
   $squareContainer.appendChild($backgroundImg);
-  $backgroundImg.classList.add(CLASS_NAME.BG_IMG);
+  $backgroundImg.classList.add('bg-img');
+  $backgroundImg.setAttribute('draggable', false);
 }
 
 function updateGameTimer(seconds) {
@@ -194,16 +195,21 @@ function finishGame(gameState) {
   createBackgroundImg();
   changeBackgroundImg(gameState);
   stopTimer();
+  sound.stopBackground();
 }
 
 function restartGame() {
   isPlaying = false;
+  answerCount = 0;
   stopTimer();
   removeSquares();
   createBackgroundImg();
   changeButtonText();
   toggleGameInfoBar();
   changeBackgroundImg(GAME.RESTART);
+  sound.stopBackground();
+  sound.stopWin();
+  sound.stopLose();
 }
 
 function startGame() {
@@ -215,6 +221,8 @@ function startGame() {
   changeButtonText();
   toggleGameInfoBar();
   updateAnswerCount(answerCount);
+  sound.playBackground();
+
 }
 
 $squareContainer.addEventListener('click', (ev) => {
@@ -226,6 +234,7 @@ $squareContainer.addEventListener('click', (ev) => {
 });
 
 $startButton.addEventListener('click', () => {
+  sound.playStart();
   if (isPlaying) {
     restartGame();
   } else {
