@@ -16,6 +16,7 @@ body {
   user-select:none;
   -webkit-user-select: none;
   perspective: 600px;
+  text-align: center;
 }
 
 button {
@@ -30,9 +31,17 @@ button:hover {
   transform: scale(1.1);
 }
 
+header {
+
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+}
+
 .title {
   font-size: 3em;
-  margin: 0;
+  margin: 0 auto;
   margin-top: 40px;
   text-align: center;
   color: var(--title-color);
@@ -129,7 +138,11 @@ button:hover {
 }
 
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 575px) {
+  header{
+    width: 315px;
+  }
+
   .title {
     font-size: 2.5em;
   }
@@ -142,17 +155,17 @@ button:hover {
   }
 
   .square__container {
-    width: 335px;
-    height: 335px;
+    width: 315px;
+    height: 315px;
   }
 
   .square {
-    width: 80px;
-    height: 80px;
+    width: 75px;
+    height: 75px;
   }
 
   .game__info {
-    width: 335px;
+    width: 315px;
     font-size: 20px;
     flex-direction: column;
   }
