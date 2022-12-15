@@ -39,7 +39,7 @@
 
 만약 중도포기 하고 싶을 경우 게임진행중에 재시작버튼을 눌러서 다시 시작할 수 있습니다.
 
-[🕹 최수종찾기 게임하러 가기](https://mycolki.github.io/)  
+[🕹 최수종찾기 게임하러 가기](https://bejewelled-faloodeh-7a8a29.netlify.app/)  
 
 <br>
 
