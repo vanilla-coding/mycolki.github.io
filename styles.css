@@ -98,6 +98,10 @@ header {
   z-index: 2;
 }
 
+.front-square.flip {
+  z-index: 0;
+}
+
 .front-square.img-display {
   display: none;
 }
